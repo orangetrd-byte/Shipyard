@@ -1,0 +1,10 @@
+{
+  "name": "Touch-Off Helper",
+  "short_name": "Touch-Off",
+  "description": "Beginner lathe touch-off, move calculator, notes, speeds and feeds, and setup reference.",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#f7fbfb",
+  "theme_color": "#0a6f73",
+  "icons": []
+}
