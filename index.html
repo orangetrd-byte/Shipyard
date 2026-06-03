@@ -1,0 +1,286 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Touch-Off Helper</title>
+  <meta name="theme-color" content="#0a6f73">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="Touch-Off">
+  <link rel="manifest" href="./manifest.json">
+  <style>
+    :root{
+      --primary:#0a6f73;--on-primary:#fff;--primary-soft:#b8ecec;
+      --bg:#f7fbfb;--card:#eef6f6;--card2:#e4f0f0;--line:#bfd0d0;
+      --text:#142020;--muted:#526363;--warn:#8a5a00;--warn-bg:#fff3cd;
+      --bad:#b42318;--bad-bg:#ffe1de;--good:#176b35;--good-bg:#e2f4e8;
+      --radius:24px;--radius-sm:16px;--font:Roboto,Arial,sans-serif;
+    }
+    *{box-sizing:border-box}
+    body{margin:0;background:var(--bg);color:var(--text);font-family:var(--font);font-size:15px;line-height:1.45;padding-bottom:96px}
+    header{padding:22px 18px 8px;max-width:980px;margin:0 auto}
+    .kicker{font-size:12px;font-weight:800;text-transform:uppercase;letter-spacing:.08em;color:var(--primary)}
+    h1{margin:4px 0 8px;font-size:31px;line-height:1.05}
+    h2{margin:0 0 10px;font-size:22px}
+    h3{margin:0 0 8px;font-size:16px}
+    p{margin:0 0 10px;color:var(--muted)}
+    main{max-width:980px;margin:0 auto;padding:0 14px}
+    .page{display:none}
+    .page.active{display:block}
+    .hero{background:linear-gradient(135deg,var(--primary-soft),#eaf8f5);border-radius:30px;padding:20px;margin-bottom:14px}
+    .card{background:var(--card);border:1px solid rgba(10,111,115,.1);border-radius:var(--radius);padding:17px;margin-bottom:14px}
+    .soft{background:var(--card2)}
+    .grid{display:grid;gap:12px}
+    .two{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+    label{display:block;font-size:12px;font-weight:800;color:var(--muted);margin:0 0 5px}
+    input,select,textarea{width:100%;border:1px solid var(--line);border-radius:var(--radius-sm);background:#fff;color:var(--text);font:inherit;padding:13px 14px;outline:none}
+    textarea{min-height:112px;resize:vertical}
+    input:focus,select:focus,textarea:focus{border-color:var(--primary);box-shadow:0 0 0 3px rgba(10,111,115,.15)}
+    .field{margin-bottom:12px}
+    button{border:0;border-radius:999px;padding:12px 17px;min-height:44px;font:inherit;font-weight:800;cursor:pointer}
+    .filled{background:var(--primary);color:var(--on-primary)}
+    .tonal{background:var(--primary-soft);color:#002021}
+    .outline{background:transparent;border:1px solid var(--primary);color:var(--primary)}
+    .danger{background:var(--bad-bg);color:var(--bad)}
+    .row{display:flex;gap:9px;align-items:center;flex-wrap:wrap}
+    .result{background:#fff;border:1px solid var(--line);border-radius:18px;padding:14px;margin-top:10px}
+    .warn{background:var(--warn-bg);border-color:#e0b849;color:var(--warn)}
+    .bad{background:var(--bad-bg);border-color:#e7a19b;color:var(--bad)}
+    .good{background:var(--good-bg);border-color:#8bc99c;color:var(--good)}
+    .step{display:grid;grid-template-columns:34px 1fr;gap:11px;padding:12px 0;border-top:1px solid var(--line)}
+    .step:first-child{border-top:0}
+    .num{width:34px;height:34px;border-radius:50%;display:grid;place-items:center;background:var(--primary);color:#fff;font-weight:900}
+    .tip-list{display:grid;gap:10px}
+    .tip{background:#fff;border:1px solid var(--line);border-radius:18px;padding:13px}
+    .check{display:flex;gap:10px;align-items:flex-start;background:#fff;border:1px solid var(--line);border-radius:18px;padding:12px}
+    .check input{width:22px;height:22px;accent-color:var(--primary);margin-top:2px}
+    .progress{height:10px;background:#d5e5e5;border-radius:999px;overflow:hidden;margin:10px 0}
+    .progress span{display:block;height:100%;background:var(--primary);width:0}
+    .log{display:grid;gap:8px;max-height:260px;overflow:auto}
+    .log-entry{background:#fff;border:1px solid var(--line);border-radius:16px;padding:10px}
+    .log-entry time{display:block;color:var(--muted);font-size:12px;font-weight:800;margin-bottom:4px}
+    table{width:100%;border-collapse:collapse;background:#fff;border-radius:18px;overflow:hidden}
+    th,td{text-align:left;padding:11px;border-bottom:1px solid var(--line);vertical-align:top}
+    th{font-size:11px;text-transform:uppercase;letter-spacing:.05em;color:var(--muted)}
+    .nav{position:fixed;left:10px;right:10px;bottom:10px;background:var(--card2);border:1px solid rgba(10,111,115,.14);border-radius:28px;padding:7px;display:grid;grid-template-columns:repeat(6,1fr);gap:3px;z-index:10}
+    .nav button{background:transparent;color:var(--muted);font-size:11px;min-height:58px;padding:6px 4px;border-radius:22px;display:flex;flex-direction:column;gap:3px;align-items:center;justify-content:center}
+    .nav button b{font-size:18px}
+    .nav button.active{background:var(--primary-soft);color:#002021}
+    @media(max-width:720px){.two{grid-template-columns:1fr}.nav{grid-template-columns:repeat(3,1fr)}body{padding-bottom:158px}h1{font-size:28px}}
+  </style>
+</head>
+<body>
+  <header>
+    <div class="kicker">Beginner Lathe Tool</div>
+    <h1>Touch-Off Helper</h1>
+    <p>Step-by-step support for touch-off, safe moves, job notes, speeds and feeds, and setup reference.</p>
+  </header>
+
+  <main>
+    <section class="page active" id="wizard">
+      <div class="hero"><h2>New Setup Wizard</h2><p>Follow this order before touching off or walking to the machine.</p></div>
+      <div class="card">
+        <div class="progress"><span id="wizardBar"></span></div>
+        <p id="wizardCount">0 / 10 complete</p>
+        <div class="grid" id="wizardChecks"></div>
+      </div>
+      <div class="card soft">
+        <h3>Before the first machine move</h3>
+        <div class="tip-list">
+          <div class="tip">Confirm machine, part, material, operation, and active offset.</div>
+          <div class="tip">Confirm X mode: diameter or radius. This is the most common beginner mistake.</div>
+          <div class="tip">Set feed override low and prove the first move in single block.</div>
+          <div class="tip">Know your retract path before you move toward the part.</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="page" id="touch">
+      <div class="hero"><h2>Beginner Touch-Off Helper</h2><p>Use this to think through X/Z touch-off without mixing diameter, radius, or sign direction.</p></div>
+      <div class="card">
+        <div class="two">
+          <div class="field"><label>Touch-Off Type</label><select id="touchType"><option value="xDiameter">X Diameter</option><option value="xRadius">X Radius</option><option value="zFace">Z Face</option></select></div>
+          <div class="field"><label>Method</label><select id="touchMethod"><option>Cut and measure</option><option>Paper / shim</option><option>Known gauge</option></select></div>
+          <div class="field"><label>Current Offset / Readout</label><input id="touchCurrent" type="number" step="0.0001" placeholder="0.0000"></div>
+          <div class="field"><label>Measured Value</label><input id="touchMeasured" type="number" step="0.0001" placeholder="2.1250"></div>
+          <div class="field"><label>Target Value</label><input id="touchTarget" type="number" step="0.0001" placeholder="2.0000"></div>
+          <div class="field"><label>Unit</label><select id="touchUnit"><option>inch</option><option>mm</option></select></div>
+        </div>
+        <button class="filled" onclick="calcTouchOff()">Calculate Touch-Off</button>
+        <div id="touchOut"></div>
+      </div>
+      <div class="card soft">
+        <h3>Touch-off sequence</h3>
+        <div class="step"><div class="num">1</div><div><b>Know the mode.</b><p>X diameter and X radius are not the same. Confirm what the control displays.</p></div></div>
+        <div class="step"><div class="num">2</div><div><b>Take a light cut or touch carefully.</b><p>Do not force a tool into the part just to get a number.</p></div></div>
+        <div class="step"><div class="num">3</div><div><b>Measure and correct.</b><p>Use the measured value and target value to calculate correction.</p></div></div>
+        <div class="step"><div class="num">4</div><div><b>Prove the next move.</b><p>Single block, rapid clear, feed near the part.</p></div></div>
+      </div>
+    </section>
+
+    <section class="page" id="move">
+      <div class="hero"><h2>Manual Lathe Move Calculator</h2><p>Calculate distance and direction before moving an axis.</p></div>
+      <div class="card">
+        <div class="two">
+          <div class="field"><label>Axis</label><select id="moveAxis"><option>X</option><option>Z</option></select></div>
+          <div class="field"><label>Current Position</label><input id="moveCurrent" type="number" step="0.0001"></div>
+          <div class="field"><label>Target Position</label><input id="moveTarget" type="number" step="0.0001"></div>
+          <div class="field"><label>Move Mode</label><select id="moveMode"><option>Absolute position</option><option>Incremental distance</option></select></div>
+        </div>
+        <button class="filled" onclick="calcMove()">Calculate Move</button>
+        <div id="moveOut"></div>
+      </div>
+    </section>
+
+    <section class="page" id="notes">
+      <div class="hero"><h2>Job Notes</h2><p>Save simple setup notes on this device. Export when you want a backup.</p></div>
+      <div class="card">
+        <div class="two">
+          <div class="field"><label>Part Number</label><input id="partNumber"></div>
+          <div class="field"><label>Material</label><input id="material"></div>
+          <div class="field"><label>Machine</label><input id="machine"></div>
+          <div class="field"><label>Operation</label><input id="operation"></div>
+          <div class="field"><label>Last Setup By</label><input id="setupBy" placeholder="Name or initials"></div>
+          <div class="field"><label>Last Run By</label><input id="runBy" placeholder="Name or initials"></div>
+          <div class="field"><label>Setup Status</label><select id="setupStatus"><option>Ready</option><option>Incomplete</option><option>Needs attention</option><option>Hold</option></select></div>
+          <div class="field"><label>Attention Flag</label><input id="attentionFlag" placeholder="e.g. verify Z before restart"></div>
+        </div>
+        <div class="field"><label>Setup / Offset Notes</label><textarea id="jobNotes"></textarea></div>
+        <div class="row">
+          <button class="filled" onclick="saveNotes()">Save</button>
+          <button class="tonal" onclick="addLogEntry()">Add Log Entry</button>
+          <button class="outline" onclick="loadNotes()">Load</button>
+          <button class="tonal" onclick="exportData()">Export</button>
+          <label class="outline" style="border-radius:999px;padding:12px 17px;cursor:pointer;margin:0">Import<input type="file" accept="application/json" onchange="importData(this)" style="display:none"></label>
+          <button class="danger" onclick="resetData()">Reset</button>
+        </div>
+        <div id="noteStatus"></div>
+        <div class="card soft" style="margin-top:14px">
+          <h3>Timestamped Note Log</h3>
+          <div class="log" id="noteLog"></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="page" id="feeds">
+      <div class="hero"><h2>Speeds / Feeds</h2><p>Starter values for reference. Adjust for machine, setup rigidity, coolant, and tool condition.</p></div>
+      <div class="card">
+        <div class="two">
+          <div class="field"><label>Material</label><select id="feedMaterial" onchange="renderFeeds()"><option>Aluminum 6061</option><option>Steel 1018</option><option>Alloy Steel 4140</option><option>Stainless 304</option><option>Cast Iron</option></select></div>
+          <div class="field"><label>Operation</label><select id="feedOp" onchange="renderFeeds()"><option>Turning</option><option>Drilling</option><option>Boring</option><option>Threading</option><option>Parting</option></select></div>
+        </div>
+        <div id="feedOut"></div>
+      </div>
+    </section>
+
+    <section class="page" id="reference">
+      <div class="hero"><h2>Setup Reference</h2><p>Lathe setup tips, safe approach, retract, and symbols.</p></div>
+      <div class="grid">
+        <div class="card"><h3>Lathe Setup Tips</h3><div class="tip-list"><div class="tip">Face first when possible so Z zero is clean and repeatable.</div><div class="tip">Keep stickout short. Long stickout changes chatter, taper, and tool life.</div><div class="tip">Confirm chuck pressure, jaw contact, and part stop before cycle start.</div></div></div>
+        <div class="card"><h3>Touch-off Tips</h3><div class="tip-list"><div class="tip">Write down whether X was set in diameter or radius mode.</div><div class="tip">After touching Z face, retract in X or Z before jogging quickly.</div><div class="tip">Measure twice before changing an offset by a large amount.</div></div></div>
+        <div class="card"><h3>Safe Approach / Retract</h3><div class="tip-list"><div class="tip">Rapid to clearance, feed near the part.</div><div class="tip">Single block first move after offset changes.</div><div class="tip">Retract clear before tool change, restart, or index.</div></div></div>
+        <div class="card"><h3>Symbols & Meanings</h3><table><tr><th>Symbol</th><th>Meaning</th></tr><tr><td>X</td><td>Cross-slide axis. Often diameter on lathes.</td></tr><tr><td>Z</td><td>Spindle axis. Face direction depends on machine/control setup.</td></tr><tr><td>SFM</td><td>Surface feet per minute.</td></tr><tr><td>IPR</td><td>Feed per spindle revolution.</td></tr><tr><td>Wear</td><td>Small offset correction after setup.</td></tr></table></div>
+      </div>
+    </section>
+  </main>
+
+  <nav class="nav" aria-label="Main navigation">
+    <button data-page="wizard"><b>1</b>Setup</button>
+    <button class="active" data-page="touch"><b>◎</b>Touch</button>
+    <button data-page="move"><b>↔</b>Move</button>
+    <button data-page="notes"><b>□</b>Notes</button>
+    <button data-page="feeds"><b>◌</b>Feeds</button>
+    <button data-page="reference"><b>?</b>Ref</button>
+  </nav>
+
+  <script>
+    const STORE='touch-off-helper-v1';
+    const feeds={
+      'Aluminum 6061':{Turning:'600-1200 SFM, .004-.014 IPR',Drilling:'150-300 SFM, .002-.010 IPR',Boring:'500-900 SFM, .003-.010 IPR',Threading:'300-700 RPM starter, verify pitch',Parting:'300-600 SFM, rigid setup required'},
+      'Steel 1018':{Turning:'350-650 SFM, .004-.012 IPR',Drilling:'70-120 SFM, .002-.008 IPR',Boring:'250-500 SFM, .003-.009 IPR',Threading:'150-500 RPM starter, verify pitch',Parting:'150-300 SFM, reduce chatter'},
+      'Alloy Steel 4140':{Turning:'250-500 SFM, .004-.010 IPR',Drilling:'50-90 SFM, .002-.006 IPR',Boring:'180-380 SFM, .003-.008 IPR',Threading:'120-350 RPM starter, use oil/coolant',Parting:'100-220 SFM, keep short stickout'},
+      'Stainless 304':{Turning:'180-350 SFM, .003-.009 IPR',Drilling:'35-70 SFM, .001-.005 IPR',Boring:'140-280 SFM, .002-.007 IPR',Threading:'80-250 RPM starter, avoid rubbing',Parting:'80-180 SFM, sharp tool and coolant'},
+      'Cast Iron':{Turning:'300-700 SFM, .004-.014 IPR',Drilling:'60-100 SFM, .002-.007 IPR',Boring:'250-550 SFM, .003-.010 IPR',Threading:'150-400 RPM starter',Parting:'150-350 SFM, dust control'}
+    };
+    const wizardItems=[
+      'Machine and control confirmed',
+      'Part number, material, and operation confirmed',
+      'Stock size, grip, and stickout checked',
+      'Tools loaded and tool numbers verified',
+      'X mode confirmed: diameter or radius',
+      'Z face / work zero plan confirmed',
+      'Touch-off method chosen',
+      'Air move / single block planned',
+      'Feed override low for prove-out',
+      'Safe retract path confirmed'
+    ];
+    function state(){try{return JSON.parse(localStorage.getItem(STORE)||'{}')}catch(e){return {}}}
+    function saveState(s){localStorage.setItem(STORE,JSON.stringify(s))}
+    function ensureSample(){
+      const s=state();
+      if(s.started) return;
+      s.started=true;
+      s.notes={
+        partNumber:'SAMPLE-1001',
+        material:'Steel 1018',
+        machine:'Manual/CNC Lathe',
+        operation:'OP10 Face and OD turn',
+        setupBy:'',
+        runBy:'',
+        setupStatus:'Incomplete',
+        attentionFlag:'Sample only - replace before running a real job.',
+        jobNotes:'Sample setup: face stock, touch Z on clean face, confirm X diameter mode, prove first move in single block.'
+      };
+      s.log=[{time:new Date().toLocaleString(),text:'Sample job loaded to show how the app is meant to be used.'}];
+      s.checks={};
+      saveState(s);
+    }
+    document.querySelectorAll('.nav button').forEach(btn=>btn.addEventListener('click',()=>showPage(btn.dataset.page)));
+    function showPage(id){document.querySelectorAll('.page').forEach(p=>p.classList.toggle('active',p.id===id));document.querySelectorAll('.nav button').forEach(b=>b.classList.toggle('active',b.dataset.page===id));localStorage.setItem('touch-page',id)}
+    function num(id){return parseFloat(document.getElementById(id).value)}
+    function renderWizard(){
+      const s=state(), checks=s.checks||{};
+      const done=wizardItems.filter(item=>checks[item]).length;
+      wizardChecks.innerHTML=wizardItems.map(item=>`<label class="check"><input type="checkbox" ${checks[item]?'checked':''} onchange="toggleCheck('${item.replace(/'/g,'&#39;')}',this.checked)"><span>${item}</span></label>`).join('');
+      wizardCount.textContent=`${done} / ${wizardItems.length} complete`;
+      wizardBar.style.width=`${Math.round((done/wizardItems.length)*100)}%`;
+    }
+    function toggleCheck(item,checked){
+      const s=state();
+      s.checks=s.checks||{};
+      s.checks[item]=checked;
+      saveState(s);
+      renderWizard();
+    }
+    function calcTouchOff(){
+      const cur=num('touchCurrent'), measured=num('touchMeasured'), target=num('touchTarget'), type=touchType.value, unit=touchUnit.value;
+      if(!Number.isFinite(cur)||!Number.isFinite(measured)||!Number.isFinite(target)){touchOut.innerHTML='<div class="result warn">Enter current, measured, and target values.</div>';return}
+      const correction=target-measured, corrected=cur+correction;
+      const mode=type==='xDiameter'?'X diameter mode. Confirm the control expects diameter correction, not radius.':type==='xRadius'?'X radius mode. Diameter error is twice the radius error.':'Z face mode. Confirm positive/negative direction before jogging.';
+      const warnings=[];
+      if(type==='xDiameter'&&Math.abs(correction)>0.25) warnings.push('Large X diameter correction. Recheck measurement before changing the offset.');
+      if(type==='xRadius'&&Math.abs(correction)>0.125) warnings.push('Large X radius correction. Confirm you are not entering a diameter value in radius mode.');
+      if(type==='xDiameter'&&target>measured) warnings.push('Target diameter is larger than measured. On an OD, this may mean less stock removal, not more. Confirm the part condition.');
+      if(type==='zFace'&&Math.abs(correction)>0.1) warnings.push('Large Z correction. Confirm face touch direction and active work offset.');
+      const warnHtml=warnings.length?`<div class="result bad"><h3>Sanity check</h3>${warnings.map(w=>`<p>${w}</p>`).join('')}</div>`:'<div class="result good">Sanity check: correction size looks reasonable. Still prove the move slowly.</div>';
+      touchOut.innerHTML=`<div class="result good"><h3>Correction</h3><p>Step 1: compare measured value to target.</p><p>Measured ${measured.toFixed(4)} ${unit}; target ${target.toFixed(4)} ${unit}.</p><p>Step 2: apply correction: <b>${correction.toFixed(4)} ${unit}</b></p><p>Step 3: new offset/readout target: <b>${corrected.toFixed(4)}</b></p></div><div class="result warn">${mode} Prove the next move in single block with feed override low.</div>${warnHtml}`;
+    }
+    function calcMove(){
+      const cur=num('moveCurrent'), target=num('moveTarget');
+      if(!Number.isFinite(cur)||!Number.isFinite(target)){moveOut.innerHTML='<div class="result warn">Enter current and target positions.</div>';return}
+      const delta=target-cur, dir=delta>0?'positive':delta<0?'negative':'no movement';
+      moveOut.innerHTML=`<div class="result"><h3>Move</h3><p>Move ${moveAxis.value} <b>${Math.abs(delta).toFixed(4)}</b> in the <b>${dir}</b> direction.</p><p class="warn result">Check clearance before jogging. Feed near the part.</p></div>`;
+    }
+    function saveNotes(){const s=state();s.notes={partNumber:partNumber.value,material:material.value,machine:machine.value,operation:operation.value,setupBy:setupBy.value,runBy:runBy.value,setupStatus:setupStatus.value,attentionFlag:attentionFlag.value,jobNotes:jobNotes.value};saveState(s);noteStatus.innerHTML='<div class="result good">Saved on this device.</div>';renderLog()}
+    function loadNotes(){const n=state().notes||{};partNumber.value=n.partNumber||'';material.value=n.material||'';machine.value=n.machine||'';operation.value=n.operation||'';setupBy.value=n.setupBy||'';runBy.value=n.runBy||'';setupStatus.value=n.setupStatus||'Ready';attentionFlag.value=n.attentionFlag||'';jobNotes.value=n.jobNotes||'';renderLog()}
+    function addLogEntry(){const text=jobNotes.value.trim()||attentionFlag.value.trim();if(!text){noteStatus.innerHTML='<div class="result warn">Enter a note or attention flag first.</div>';return}const s=state();s.log=s.log||[];s.log.unshift({time:new Date().toLocaleString(),text,by:setupBy.value||runBy.value||''});saveState(s);renderLog();noteStatus.innerHTML='<div class="result good">Log entry added.</div>'}
+    function renderLog(){const log=state().log||[];noteLog.innerHTML=log.length?log.map(e=>`<div class="log-entry"><time>${e.time}${e.by?' - '+e.by:''}</time><div>${e.text}</div></div>`).join(''):'<p>No log entries yet.</p>'}
+    function resetData(){if(!confirm('Export first if you need a backup. Reset this app?'))return;localStorage.removeItem(STORE);ensureSample();loadNotes();renderWizard();noteStatus.innerHTML='<div class="result warn">Reset complete. Sample job restored.</div>'}
+    function exportData(){const blob=new Blob([JSON.stringify(state(),null,2)],{type:'application/json'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='touch-off-helper-backup.json';a.click();setTimeout(()=>URL.revokeObjectURL(a.href),500)}
+    function importData(input){const file=input.files&&input.files[0];input.value='';if(!file)return;const r=new FileReader();r.onload=()=>{try{saveState(JSON.parse(r.result));loadNotes();noteStatus.innerHTML='<div class="result good">Import complete.</div>'}catch(e){alert('Import failed.')}};r.readAsText(file)}
+    function renderFeeds(){feedOut.innerHTML=`<div class="result"><b>${feedMaterial.value} / ${feedOp.value}</b><p>${feeds[feedMaterial.value][feedOp.value]}</p></div>`}
+    if('serviceWorker' in navigator){window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js'))}
+    ensureSample();loadNotes();renderWizard();renderFeeds();showPage(localStorage.getItem('touch-page')||'wizard');
+  </script>
+</body>
+</html>
