@@ -33,6 +33,7 @@
     .grid{display:grid;gap:12px}
     .two{display:grid;grid-template-columns:1fr 1fr;gap:12px}
     label{display:block;font-size:12px;font-weight:800;color:var(--muted);margin:0 0 5px}
+    .help{font-size:12px;color:var(--muted);margin:6px 0 0}
     input,select,textarea{width:100%;border:1px solid var(--line);border-radius:var(--radius-sm);background:#fff;color:var(--text);font:inherit;padding:13px 14px;outline:none}
     textarea{min-height:112px;resize:vertical}
     input:focus,select:focus,textarea:focus{border-color:var(--primary);box-shadow:0 0 0 3px rgba(10,111,115,.15)}
@@ -127,12 +128,12 @@
       <div class="hero"><h2>Beginner Touch-Off Helper</h2><p>Use this to think through X/Z touch-off without mixing diameter, radius, or sign direction.</p></div>
       <div class="card">
         <div class="two">
-          <div class="field"><label>Touch-Off Type</label><select id="touchType"><option value="xDiameter">X Diameter</option><option value="xRadius">X Radius</option><option value="zFace">Z Face</option></select></div>
-          <div class="field"><label>Method</label><select id="touchMethod"><option>Cut and measure</option><option>Paper / shim</option><option>Known gauge</option></select></div>
-          <div class="field"><label>Current Offset / Readout</label><input id="touchCurrent" type="number" step="0.0001" placeholder="0.0000"></div>
-          <div class="field"><label>Measured Value</label><input id="touchMeasured" type="number" step="0.0001" placeholder="2.1250"></div>
-          <div class="field"><label>Target Value</label><input id="touchTarget" type="number" step="0.0001" placeholder="2.0000"></div>
-          <div class="field"><label>Unit</label><select id="touchUnit"><option>inch</option><option>mm</option></select></div>
+          <div class="field"><label>Touch-Off Type</label><select id="touchType"><option value="xDiameter">X Diameter</option><option value="xRadius">X Radius</option><option value="zFace">Z Face</option></select><p class="help">X diameter means the control shows the full part diameter. X radius means it shows distance from centerline. Z face means setting the front/back face location.</p></div>
+          <div class="field"><label>Method</label><select id="touchMethod"><option>Cut and measure</option><option>Paper / shim</option><option>Known gauge</option></select><p class="help">This is how you found the tool position. Cut and measure is usually most accurate. Paper or shim is a gentle touch method.</p></div>
+          <div class="field"><label>Current Offset / Readout</label><input id="touchCurrent" type="number" step="0.0001" placeholder="0.0000"><p class="help">The number currently shown or stored before correction.</p></div>
+          <div class="field"><label>Measured Value</label><input id="touchMeasured" type="number" step="0.0001" placeholder="2.1250"><p class="help">What the part, face, or gauge actually measured after touching off.</p></div>
+          <div class="field"><label>Target Value</label><input id="touchTarget" type="number" step="0.0001" placeholder="2.0000"><p class="help">What you want that measured value to be.</p></div>
+          <div class="field"><label>Unit</label><select id="touchUnit"><option>inch</option><option>mm</option></select><p class="help">Use the same unit as the machine, print, and measuring tool.</p></div>
         </div>
         <div class="row">
           <button class="filled" onclick="calcTouchOff()">Calculate Touch-Off</button>
@@ -157,10 +158,10 @@
       <div class="hero"><h2>Manual Lathe Move Calculator</h2><p>Calculate distance and direction before moving an axis.</p></div>
       <div class="card">
         <div class="two">
-          <div class="field"><label>Axis</label><select id="moveAxis"><option>X</option><option>Z</option></select></div>
-          <div class="field"><label>Current Position</label><input id="moveCurrent" type="number" step="0.0001"></div>
-          <div class="field"><label>Target Position</label><input id="moveTarget" type="number" step="0.0001"></div>
-          <div class="field"><label>Move Mode</label><select id="moveMode"><option>Absolute position</option><option>Incremental distance</option></select></div>
+          <div class="field"><label>Axis</label><select id="moveAxis"><option>X</option><option>Z</option></select><p class="help">X moves toward or away from spindle centerline. Z moves along the spindle, usually toward or away from the part face.</p></div>
+          <div class="field"><label>Current Position</label><input id="moveCurrent" type="number" step="0.0001"><p class="help">Where the control says the tool is now.</p></div>
+          <div class="field"><label>Target Position</label><input id="moveTarget" type="number" step="0.0001"><p class="help">Where you want the tool to end up.</p></div>
+          <div class="field"><label>Move Mode</label><select id="moveMode"><option>Absolute position</option><option>Incremental distance</option></select><p class="help">Absolute means move to a position. Incremental means move by a distance from where you are now.</p></div>
         </div>
         <button class="filled" onclick="calcMove()">Calculate Move</button>
         <div id="moveOut"></div>
@@ -177,10 +178,10 @@
           <div class="field"><label>Operation</label><input id="operation"></div>
           <div class="field"><label>Last Setup By</label><input id="setupBy" placeholder="Name or initials"></div>
           <div class="field"><label>Last Run By</label><input id="runBy" placeholder="Name or initials"></div>
-          <div class="field"><label>Setup Status</label><select id="setupStatus"><option>Ready</option><option>Incomplete</option><option>Needs attention</option><option>Hold</option></select></div>
-          <div class="field"><label>Attention Flag</label><input id="attentionFlag" placeholder="e.g. verify Z before restart"></div>
+          <div class="field"><label>Setup Status</label><select id="setupStatus"><option>Ready</option><option>Incomplete</option><option>Needs attention</option><option>Hold</option></select><p class="help">Ready means another person can run it. Incomplete or hold means do not continue without checking.</p></div>
+          <div class="field"><label>Attention Flag</label><input id="attentionFlag" placeholder="e.g. verify Z before restart"><p class="help">A short warning for the next person, or for you after a break.</p></div>
         </div>
-        <div class="field"><label>Setup / Offset Notes</label><textarea id="jobNotes"></textarea></div>
+        <div class="field"><label>Setup / Offset Notes</label><textarea id="jobNotes"></textarea><p class="help">Write the setup story here: jaws, stickout, offsets used, tools touched, anything unusual, and what still needs checked.</p></div>
         <div class="row">
           <button class="filled" onclick="saveNotes()">Save</button>
           <button class="tonal" onclick="addLogEntry()">Add Log Entry</button>
@@ -210,8 +211,8 @@
       <div class="hero"><h2>Speeds / Feeds</h2><p>Starter values for reference. Adjust for machine, setup rigidity, coolant, and tool condition.</p></div>
       <div class="card">
         <div class="two">
-          <div class="field"><label>Material</label><select id="feedMaterial" onchange="renderFeeds()"><option>Aluminum 6061</option><option>Steel 1018</option><option>Alloy Steel 4140</option><option>Stainless 304</option><option>Cast Iron</option></select></div>
-          <div class="field"><label>Operation</label><select id="feedOp" onchange="renderFeeds()"><option>Turning</option><option>Drilling</option><option>Boring</option><option>Threading</option><option>Parting</option></select></div>
+          <div class="field"><label>Material</label><select id="feedMaterial" onchange="renderFeeds()"><option>Aluminum 6061</option><option>Steel 1018</option><option>Alloy Steel 4140</option><option>Stainless 304</option><option>Cast Iron</option></select><p class="help">Material changes cutting speed. Softer materials usually allow faster surface speed than tougher materials.</p></div>
+          <div class="field"><label>Operation</label><select id="feedOp" onchange="renderFeeds()"><option>Turning</option><option>Drilling</option><option>Boring</option><option>Threading</option><option>Parting</option></select><p class="help">Different operations need different feed and speed because the tool is supported differently.</p></div>
         </div>
         <div id="feedOut"></div>
       </div>
@@ -377,7 +378,7 @@
     function resetData(){if(!confirm('Export first if you need a backup. Reset this app?'))return;localStorage.removeItem(STORE);ensureSample();loadNotes();renderWizard();noteStatus.innerHTML='<div class="result warn">Reset complete. Sample job restored.</div>'}
     function exportData(){const blob=new Blob([JSON.stringify(state(),null,2)],{type:'application/json'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='touch-off-helper-backup.json';a.click();setTimeout(()=>URL.revokeObjectURL(a.href),500)}
     function importData(input){const file=input.files&&input.files[0];input.value='';if(!file)return;const r=new FileReader();r.onload=()=>{try{saveState(JSON.parse(r.result));loadNotes();noteStatus.innerHTML='<div class="result good">Import complete.</div>'}catch(e){alert('Import failed.')}};r.readAsText(file)}
-    function renderFeeds(){feedOut.innerHTML=`<div class="result"><b>${feedMaterial.value} / ${feedOp.value}</b><p>${feeds[feedMaterial.value][feedOp.value]}</p></div>`}
+    function renderFeeds(){feedOut.innerHTML=`<div class="result"><b>${feedMaterial.value} / ${feedOp.value}</b><p>${feeds[feedMaterial.value][feedOp.value]}</p><p><b>SFM</b> is cutting speed at the surface. <b>RPM</b> is spindle speed. <b>IPR</b> is how far the tool feeds each spindle revolution.</p></div>`}
     if('serviceWorker' in navigator){window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js'))}
     ensureSample();loadNotes();renderWizard();renderFeeds();renderTouchHistory();renderHandoff();showPage(localStorage.getItem('touch-page')||'wizard');
   </script>
