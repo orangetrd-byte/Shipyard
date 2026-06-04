@@ -23,3 +23,5 @@ Standalone beginner lathe setup app.
 - Includes a simple PWA manifest and service worker.
 - First launch loads a sample job so a beginner can see how the app is meant to be used.
 - The touch-off helper includes inline warnings for common mistakes such as diameter/radius confusion and large offset corrections.
+- Touch-off calculations can be saved to a recent history list.
+- Job Notes includes a handoff summary with print and JSON export support.

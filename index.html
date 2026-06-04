@@ -59,6 +59,12 @@
     .log{display:grid;gap:8px;max-height:260px;overflow:auto}
     .log-entry{background:#fff;border:1px solid var(--line);border-radius:16px;padding:10px}
     .log-entry time{display:block;color:var(--muted);font-size:12px;font-weight:800;margin-bottom:4px}
+    .history{display:grid;gap:8px;max-height:260px;overflow:auto}
+    .history-entry{background:#fff;border:1px solid var(--line);border-radius:16px;padding:10px}
+    .history-entry time{display:block;color:var(--muted);font-size:12px;font-weight:800;margin-bottom:4px}
+    .summary-line{display:flex;justify-content:space-between;gap:12px;border-bottom:1px solid var(--line);padding:8px 0}
+    .summary-line span:first-child{color:var(--muted);font-weight:800}
+    .summary-line span:last-child{text-align:right}
     table{width:100%;border-collapse:collapse;background:#fff;border-radius:18px;overflow:hidden}
     th,td{text-align:left;padding:11px;border-bottom:1px solid var(--line);vertical-align:top}
     th{font-size:11px;text-transform:uppercase;letter-spacing:.05em;color:var(--muted)}
@@ -66,6 +72,14 @@
     .nav button{background:transparent;color:var(--muted);font-size:11px;min-height:58px;padding:6px 4px;border-radius:22px;display:flex;flex-direction:column;gap:3px;align-items:center;justify-content:center}
     .nav button b{font-size:18px}
     .nav button.active{background:var(--primary-soft);color:#002021}
+    @media print{
+      body.print-handoff header,body.print-handoff .nav,body.print-handoff .page{display:none!important}
+      body.print-handoff #notes{display:block!important}
+      body.print-handoff #notes > .hero,body.print-handoff #notes > .card > .two,body.print-handoff #notes > .card > .field,body.print-handoff #notes > .card > .row,body.print-handoff #noteStatus,body.print-handoff #noteLog{display:none!important}
+      body.print-handoff #handoffCard{display:block!important;border:0;background:#fff}
+      body.print-handoff{background:#fff;color:#000;padding:0}
+      body.print-handoff main{max-width:none;padding:0}
+    }
     @media(max-width:720px){.two{grid-template-columns:1fr}.nav{grid-template-columns:repeat(3,1fr)}body{padding-bottom:158px}h1{font-size:28px}}
   </style>
 </head>
@@ -106,8 +120,15 @@
           <div class="field"><label>Target Value</label><input id="touchTarget" type="number" step="0.0001" placeholder="2.0000"></div>
           <div class="field"><label>Unit</label><select id="touchUnit"><option>inch</option><option>mm</option></select></div>
         </div>
-        <button class="filled" onclick="calcTouchOff()">Calculate Touch-Off</button>
+        <div class="row">
+          <button class="filled" onclick="calcTouchOff()">Calculate Touch-Off</button>
+          <button class="tonal" onclick="saveLastTouch()">Save Calculation</button>
+        </div>
         <div id="touchOut"></div>
+      </div>
+      <div class="card">
+        <h3>Recent Touch-Off Calculations</h3>
+        <div class="history" id="touchHistory"></div>
       </div>
       <div class="card soft">
         <h3>Touch-off sequence</h3>
@@ -158,6 +179,15 @@
         <div class="card soft" style="margin-top:14px">
           <h3>Timestamped Note Log</h3>
           <div class="log" id="noteLog"></div>
+        </div>
+        <div class="card soft" id="handoffCard" style="margin-top:14px">
+          <h3>Handoff Summary</h3>
+          <div id="handoffSummary"></div>
+          <div class="row" style="margin-top:12px">
+            <button class="tonal" onclick="renderHandoff()">Refresh Summary</button>
+            <button class="outline" onclick="printHandoff()">Print Summary</button>
+            <button class="outline" onclick="exportHandoff()">Export Summary</button>
+          </div>
         </div>
       </div>
     </section>
@@ -214,6 +244,7 @@
       'Feed override low for prove-out',
       'Safe retract path confirmed'
     ];
+    let lastTouchCalc=null;
     function state(){try{return JSON.parse(localStorage.getItem(STORE)||'{}')}catch(e){return {}}}
     function saveState(s){localStorage.setItem(STORE,JSON.stringify(s))}
     function ensureSample(){
@@ -264,6 +295,20 @@
       if(type==='zFace'&&Math.abs(correction)>0.1) warnings.push('Large Z correction. Confirm face touch direction and active work offset.');
       const warnHtml=warnings.length?`<div class="result bad"><h3>Sanity check</h3>${warnings.map(w=>`<p>${w}</p>`).join('')}</div>`:'<div class="result good">Sanity check: correction size looks reasonable. Still prove the move slowly.</div>';
       touchOut.innerHTML=`<div class="result good"><h3>Correction</h3><p>Step 1: compare measured value to target.</p><p>Measured ${measured.toFixed(4)} ${unit}; target ${target.toFixed(4)} ${unit}.</p><p>Step 2: apply correction: <b>${correction.toFixed(4)} ${unit}</b></p><p>Step 3: new offset/readout target: <b>${corrected.toFixed(4)}</b></p></div><div class="result warn">${mode} Prove the next move in single block with feed override low.</div>${warnHtml}`;
+      lastTouchCalc={time:new Date().toLocaleString(),type:touchType.options[touchType.selectedIndex].text,method:touchMethod.value,unit,current:cur,measured,target,correction,corrected,warnings};
+    }
+    function saveLastTouch(){
+      if(!lastTouchCalc){touchOut.innerHTML+='<div class="result warn">Calculate a touch-off first, then save it.</div>';return}
+      const s=state();
+      s.touchHistory=s.touchHistory||[];
+      s.touchHistory.unshift(lastTouchCalc);
+      s.touchHistory=s.touchHistory.slice(0,10);
+      saveState(s);
+      renderTouchHistory();
+    }
+    function renderTouchHistory(){
+      const hist=state().touchHistory||[];
+      touchHistory.innerHTML=hist.length?hist.map(h=>`<div class="history-entry"><time>${h.time}</time><b>${h.type}</b> / ${h.method}<br>Measured ${Number(h.measured).toFixed(4)} ${h.unit}, target ${Number(h.target).toFixed(4)} ${h.unit}<br>Correction <b>${Number(h.correction).toFixed(4)}</b>, new target <b>${Number(h.corrected).toFixed(4)}</b>${h.warnings&&h.warnings.length?'<br><span style="color:var(--bad)">Warnings: '+h.warnings.join(' ')+'</span>':''}</div>`).join(''):'<p>No saved calculations yet.</p>';
     }
     function calcMove(){
       const cur=num('moveCurrent'), target=num('moveTarget');
@@ -271,16 +316,56 @@
       const delta=target-cur, dir=delta>0?'positive':delta<0?'negative':'no movement';
       moveOut.innerHTML=`<div class="result"><h3>Move</h3><p>Move ${moveAxis.value} <b>${Math.abs(delta).toFixed(4)}</b> in the <b>${dir}</b> direction.</p><p class="warn result">Check clearance before jogging. Feed near the part.</p></div>`;
     }
-    function saveNotes(){const s=state();s.notes={partNumber:partNumber.value,material:material.value,machine:machine.value,operation:operation.value,setupBy:setupBy.value,runBy:runBy.value,setupStatus:setupStatus.value,attentionFlag:attentionFlag.value,jobNotes:jobNotes.value};saveState(s);noteStatus.innerHTML='<div class="result good">Saved on this device.</div>';renderLog()}
-    function loadNotes(){const n=state().notes||{};partNumber.value=n.partNumber||'';material.value=n.material||'';machine.value=n.machine||'';operation.value=n.operation||'';setupBy.value=n.setupBy||'';runBy.value=n.runBy||'';setupStatus.value=n.setupStatus||'Ready';attentionFlag.value=n.attentionFlag||'';jobNotes.value=n.jobNotes||'';renderLog()}
+    function saveNotes(){const s=state();s.notes={partNumber:partNumber.value,material:material.value,machine:machine.value,operation:operation.value,setupBy:setupBy.value,runBy:runBy.value,setupStatus:setupStatus.value,attentionFlag:attentionFlag.value,jobNotes:jobNotes.value};saveState(s);noteStatus.innerHTML='<div class="result good">Saved on this device.</div>';renderLog();renderHandoff()}
+    function loadNotes(){const n=state().notes||{};partNumber.value=n.partNumber||'';material.value=n.material||'';machine.value=n.machine||'';operation.value=n.operation||'';setupBy.value=n.setupBy||'';runBy.value=n.runBy||'';setupStatus.value=n.setupStatus||'Ready';attentionFlag.value=n.attentionFlag||'';jobNotes.value=n.jobNotes||'';renderLog();renderHandoff()}
     function addLogEntry(){const text=jobNotes.value.trim()||attentionFlag.value.trim();if(!text){noteStatus.innerHTML='<div class="result warn">Enter a note or attention flag first.</div>';return}const s=state();s.log=s.log||[];s.log.unshift({time:new Date().toLocaleString(),text,by:setupBy.value||runBy.value||''});saveState(s);renderLog();noteStatus.innerHTML='<div class="result good">Log entry added.</div>'}
     function renderLog(){const log=state().log||[];noteLog.innerHTML=log.length?log.map(e=>`<div class="log-entry"><time>${e.time}${e.by?' - '+e.by:''}</time><div>${e.text}</div></div>`).join(''):'<p>No log entries yet.</p>'}
+    function handoffData(){
+      saveNotes();
+      const s=state(), n=s.notes||{}, checks=s.checks||{}, hist=s.touchHistory||[], log=s.log||[];
+      const done=wizardItems.filter(item=>checks[item]).length;
+      return {generatedAt:new Date().toLocaleString(),notes:n,checklist:`${done} / ${wizardItems.length}`,lastTouch:hist[0]||null,lastLog:log[0]||null};
+    }
+    function renderHandoff(){
+      const s=state(), n=s.notes||{}, checks=s.checks||{}, hist=s.touchHistory||[], log=s.log||[];
+      const done=wizardItems.filter(item=>checks[item]).length;
+      const last=hist[0];
+      handoffSummary.innerHTML=[
+        ['Part',n.partNumber||'--'],
+        ['Material',n.material||'--'],
+        ['Machine',n.machine||'--'],
+        ['Operation',n.operation||'--'],
+        ['Status',n.setupStatus||'--'],
+        ['Setup By',n.setupBy||'--'],
+        ['Run By',n.runBy||'--'],
+        ['Attention',n.attentionFlag||'None'],
+        ['Checklist',`${done} / ${wizardItems.length} complete`],
+        ['Last Touch-Off',last?`${last.type}: correction ${Number(last.correction).toFixed(4)} ${last.unit}`:'None saved'],
+        ['Last Log',log[0]?`${log[0].time}: ${log[0].text}`:'None']
+      ].map(([k,v])=>`<div class="summary-line"><span>${k}</span><span>${v}</span></div>`).join('');
+    }
+    function printHandoff(){
+      renderHandoff();
+      document.body.classList.add('print-handoff');
+      window.print();
+      setTimeout(()=>document.body.classList.remove('print-handoff'),400);
+    }
+    function exportHandoff(){
+      const data=handoffData();
+      const name=(data.notes.partNumber||'touch-off-handoff').replace(/[^a-z0-9-_]+/gi,'-');
+      const blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'});
+      const a=document.createElement('a');
+      a.href=URL.createObjectURL(blob);
+      a.download=`${name}-handoff.json`;
+      a.click();
+      setTimeout(()=>URL.revokeObjectURL(a.href),500);
+    }
     function resetData(){if(!confirm('Export first if you need a backup. Reset this app?'))return;localStorage.removeItem(STORE);ensureSample();loadNotes();renderWizard();noteStatus.innerHTML='<div class="result warn">Reset complete. Sample job restored.</div>'}
     function exportData(){const blob=new Blob([JSON.stringify(state(),null,2)],{type:'application/json'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='touch-off-helper-backup.json';a.click();setTimeout(()=>URL.revokeObjectURL(a.href),500)}
     function importData(input){const file=input.files&&input.files[0];input.value='';if(!file)return;const r=new FileReader();r.onload=()=>{try{saveState(JSON.parse(r.result));loadNotes();noteStatus.innerHTML='<div class="result good">Import complete.</div>'}catch(e){alert('Import failed.')}};r.readAsText(file)}
     function renderFeeds(){feedOut.innerHTML=`<div class="result"><b>${feedMaterial.value} / ${feedOp.value}</b><p>${feeds[feedMaterial.value][feedOp.value]}</p></div>`}
     if('serviceWorker' in navigator){window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js'))}
-    ensureSample();loadNotes();renderWizard();renderFeeds();showPage(localStorage.getItem('touch-page')||'wizard');
+    ensureSample();loadNotes();renderWizard();renderFeeds();renderTouchHistory();renderHandoff();showPage(localStorage.getItem('touch-page')||'wizard');
   </script>
 </body>
 </html>
