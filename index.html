@@ -56,6 +56,11 @@
     .definition-grid{display:grid;gap:10px}
     .definition{background:#fff;border:1px solid var(--line);border-radius:18px;padding:13px}
     .definition b{display:block;margin-bottom:4px}
+    .wizard-stage{background:#fff;border:1px solid var(--line);border-radius:20px;padding:14px}
+    .stage-head{display:grid;grid-template-columns:38px 1fr;gap:11px;align-items:start;margin-bottom:10px}
+    .stage-num{width:38px;height:38px;border-radius:50%;display:grid;place-items:center;background:var(--primary);color:#fff;font-weight:900}
+    .stage-head p{margin-bottom:0}
+    .stage-note{background:var(--card2);border-radius:16px;padding:11px;margin:10px 0;color:var(--muted)}
     .check{display:flex;gap:10px;align-items:flex-start;background:#fff;border:1px solid var(--line);border-radius:18px;padding:12px}
     .check input{width:22px;height:22px;accent-color:var(--primary);margin-top:2px}
     .progress{height:10px;background:#d5e5e5;border-radius:999px;overflow:hidden;margin:10px 0}
@@ -100,6 +105,7 @@
       <div class="card">
         <div class="progress"><span id="wizardBar"></span></div>
         <p id="wizardCount">0 / 10 complete</p>
+        <p>Work straight down these stages. Do not jump to touch-off until machine, stock, and tools are confirmed.</p>
         <div class="grid" id="wizardChecks"></div>
       </div>
       <div class="card soft">
@@ -247,18 +253,56 @@
       'Stainless 304':{Turning:'180-350 SFM, .003-.009 IPR',Drilling:'35-70 SFM, .001-.005 IPR',Boring:'140-280 SFM, .002-.007 IPR',Threading:'80-250 RPM starter, avoid rubbing',Parting:'80-180 SFM, sharp tool and coolant'},
       'Cast Iron':{Turning:'300-700 SFM, .004-.014 IPR',Drilling:'60-100 SFM, .002-.007 IPR',Boring:'250-550 SFM, .003-.010 IPR',Threading:'150-400 RPM starter',Parting:'150-350 SFM, dust control'}
     };
-    const wizardItems=[
-      'Machine and control confirmed',
-      'Part number, material, and operation confirmed',
-      'Stock size, grip, and stickout checked',
-      'Tools loaded and tool numbers verified',
-      'X mode confirmed: diameter or radius',
-      'Z face / work zero plan confirmed',
-      'Touch-off method chosen',
-      'Air move / single block planned',
-      'Feed override low for prove-out',
-      'Safe retract path confirmed'
+    const wizardStages=[
+      {
+        title:'Machine',
+        intro:'Confirm you are at the right machine and the control is in the mode you expect before any movement.',
+        why:'Wrong machine, wrong mode, or wrong active offset can make a correct number unsafe.',
+        items:[
+          'Machine and control confirmed',
+          'Part number, material, and operation confirmed'
+        ]
+      },
+      {
+        title:'Stock',
+        intro:'Look at the actual material in the chuck before trusting the print, notes, or memory.',
+        why:'Grip, jaws, and stickout decide whether the setup is rigid and whether the tool has clearance.',
+        items:[
+          'Stock size, grip, and stickout checked',
+          'Chuck, jaws, and clearance checked'
+        ]
+      },
+      {
+        title:'Tools',
+        intro:'Confirm the tool number, insert, orientation, and offset before bringing the tool near the part.',
+        why:'A tool can be loaded, but still be wrong for the program, upside down, worn, or tied to the wrong offset.',
+        items:[
+          'Tools loaded and tool numbers verified',
+          'Tool offsets and wear offsets checked'
+        ]
+      },
+      {
+        title:'Touch-Off',
+        intro:'Set the tool position carefully. This is where X diameter, X radius, and Z face mistakes usually happen.',
+        why:'A small misunderstanding here can double an X correction or move Z the wrong way.',
+        items:[
+          'X mode confirmed: diameter or radius',
+          'Z face / work zero plan confirmed',
+          'Touch-off method chosen'
+        ]
+      },
+      {
+        title:'Verify',
+        intro:'Prove the first moves slowly before normal running. The goal is to catch mistakes while there is time to stop.',
+        why:'Single block, low feed override, air moves, and a known retract path reduce risk during first prove-out.',
+        items:[
+          'Air move / single block planned',
+          'Feed override low for prove-out',
+          'Safe retract path confirmed'
+        ]
+      }
     ];
+    const wizardItems=wizardStages.flatMap(stage=>stage.items);
     let lastTouchCalc=null;
     function state(){try{return JSON.parse(localStorage.getItem(STORE)||'{}')}catch(e){return {}}}
     function saveState(s){localStorage.setItem(STORE,JSON.stringify(s))}
@@ -287,7 +331,11 @@
     function renderWizard(){
       const s=state(), checks=s.checks||{};
       const done=wizardItems.filter(item=>checks[item]).length;
-      wizardChecks.innerHTML=wizardItems.map(item=>`<label class="check"><input type="checkbox" ${checks[item]?'checked':''} onchange="toggleCheck('${item.replace(/'/g,'&#39;')}',this.checked)"><span>${item}</span></label>`).join('');
+      wizardChecks.innerHTML=wizardStages.map((stage,index)=>{
+        const stageDone=stage.items.filter(item=>checks[item]).length;
+        const items=stage.items.map(item=>`<label class="check"><input type="checkbox" ${checks[item]?'checked':''} onchange="toggleCheck('${item.replace(/'/g,'&#39;')}',this.checked)"><span>${item}</span></label>`).join('');
+        return `<div class="wizard-stage"><div class="stage-head"><div class="stage-num">${index+1}</div><div><h3>${stage.title}</h3><p>${stage.intro}</p></div></div><div class="stage-note"><b>Why it matters:</b> ${stage.why}</div><p>${stageDone} / ${stage.items.length} checked</p><div class="grid">${items}</div></div>`;
+      }).join('');
       wizardCount.textContent=`${done} / ${wizardItems.length} complete`;
       wizardBar.style.width=`${Math.round((done/wizardItems.length)*100)}%`;
     }
