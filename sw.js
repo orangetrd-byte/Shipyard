@@ -1,4 +1,4 @@
-const CACHE_NAME = 'touch-off-helper-v3-update-helper';
+const CACHE_NAME = 'touch-off-helper-v4-beginner-diagrams';
 const APP_SHELL = ['./', './index.html', './update-helper.js', './manifest.json'];
 
 self.addEventListener('install', event => {

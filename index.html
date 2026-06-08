@@ -56,6 +56,14 @@
     .definition-grid{display:grid;gap:10px}
     .definition{background:#fff;border:1px solid var(--line);border-radius:18px;padding:13px}
     .definition b{display:block;margin-bottom:4px}
+    .shop-diagram{max-width:100%;display:block;margin:8px auto 14px;background:#fff;border:1px solid var(--line);border-radius:18px}
+    .shop-diagram line,.shop-diagram path,.shop-diagram circle,.shop-diagram polyline,.shop-diagram rect{stroke:var(--primary);stroke-width:3;fill:none;stroke-linecap:round;stroke-linejoin:round}
+    .shop-diagram .thin{stroke-width:2}
+    .shop-diagram .danger-line{stroke:var(--bad)}
+    .shop-diagram text{fill:var(--primary);font:700 13px var(--font)}
+    .shop-diagram .note{fill:var(--muted);font-size:12px}
+    .advanced-note{background:#fff;border:1px solid var(--line);border-radius:18px;padding:13px;margin:2px 0 12px}
+    .advanced-note summary{cursor:pointer;font-weight:900;color:var(--primary)}
     .wizard-stage{background:#fff;border:1px solid var(--line);border-radius:20px;padding:14px}
     .stage-head{display:grid;grid-template-columns:38px 1fr;gap:11px;align-items:start;margin-bottom:10px}
     .stage-num{width:38px;height:38px;border-radius:50%;display:grid;place-items:center;background:var(--primary);color:#fff;font-weight:900}
@@ -119,6 +127,27 @@
       </div>
       <div class="card">
         <h3>Beginner Definitions</h3>
+        <svg class="shop-diagram" viewBox="0 0 520 220" role="img" aria-label="Simple lathe diagram showing chuck, jaws, part, tool tip, X axis, and Z axis">
+          <line class="thin" x1="46" y1="112" x2="468" y2="112"></line>
+          <rect x="58" y="58" width="78" height="108" rx="8"></rect>
+          <line x1="94" y1="66" x2="112" y2="100"></line>
+          <line x1="70" y1="112" x2="112" y2="112"></line>
+          <line x1="94" y1="158" x2="112" y2="124"></line>
+          <rect x="136" y="82" width="156" height="60" rx="30"></rect>
+          <rect x="370" y="132" width="66" height="46" rx="8"></rect>
+          <path d="M370 132 L300 112 L370 92"></path>
+          <line x1="306" y1="112" x2="286" y2="112"></line>
+          <line x1="322" y1="112" x2="410" y2="112"></line>
+          <polyline points="410,112 398,104 398,120"></polyline>
+          <line x1="214" y1="82" x2="214" y2="34"></line>
+          <polyline points="214,34 206,48 222,48"></polyline>
+          <text x="66" y="42">Chuck</text>
+          <text x="78" y="190">Jaws</text>
+          <text x="184" y="75">Part</text>
+          <text x="352" y="86">Tool Tip</text>
+          <text x="416" y="105">Z -></text>
+          <text x="222" y="44">X up</text>
+        </svg>
         <div class="definition-grid">
           <div class="definition"><b>Control confirmed</b><p>Make sure you are standing at the correct machine control, the right program or manual screen is active, and the control is in the mode you think it is in.</p></div>
           <div class="definition"><b>Stickout</b><p>The amount of part or tool hanging out unsupported. Long stickout can cause chatter, taper, bad finish, or a crash if it hits jaws or tooling.</p></div>
@@ -133,6 +162,16 @@
     <section class="page" id="touch">
       <div class="hero"><h2>Beginner Touch-Off Helper</h2><p>Use this to think through X/Z touch-off without mixing diameter, radius, or sign direction.</p></div>
       <div class="card">
+        <svg class="shop-diagram" viewBox="0 0 520 220" role="img" aria-label="Touch-off diameter diagram showing stock diameter measured with calipers">
+          <circle cx="250" cy="108" r="64"></circle>
+          <line x1="186" y1="108" x2="314" y2="108"></line>
+          <polyline points="186,108 200,100 200,116"></polyline>
+          <polyline points="314,108 300,100 300,116"></polyline>
+          <path d="M420 60 L332 108 L420 156"></path>
+          <line x1="332" y1="108" x2="314" y2="108"></line>
+          <text x="120" y="196">Touch-Off Diameter - measure this with calipers</text>
+          <text x="354" y="52">Tool tip</text>
+        </svg>
         <div class="two">
           <div class="field"><label>Touch-Off Type</label><select id="touchType"><option value="xDiameter">X Diameter</option><option value="xRadius">X Radius</option><option value="zFace">Z Face</option></select><p class="help">X diameter means the control shows the full part diameter. X radius means it shows distance from centerline. Some controls use G-codes such as G7/G8 for this, but it is control dependent. Z face means setting the front/back face location.</p></div>
           <div class="field"><label>Method</label><select id="touchMethod"><option>Cut and measure</option><option>Paper / shim</option><option>Known gauge</option></select><p class="help">This is how you found the tool position. Cut and measure is usually most accurate. Paper or shim is a gentle touch method.</p></div>
@@ -141,6 +180,20 @@
           <div class="field"><label>Target Value</label><input id="touchTarget" type="number" step="0.0001" placeholder="2.0000"><p class="help">What you want that measured value to be.</p></div>
           <div class="field"><label>Unit</label><select id="touchUnit"><option>inch</option><option>mm</option></select><p class="help">Use the same unit as the machine, print, and measuring tool.</p></div>
         </div>
+        <details class="advanced-note">
+          <summary>Advanced: Check X mode before entering offset</summary>
+          <svg class="shop-diagram" viewBox="0 0 520 230" role="img" aria-label="X diameter versus X radius mode diagram">
+            <circle cx="250" cy="102" r="64"></circle>
+            <line x1="186" y1="102" x2="314" y2="102"></line>
+            <polyline points="186,102 200,94 200,110"></polyline>
+            <polyline points="314,102 300,94 300,110"></polyline>
+            <line x1="250" y1="102" x2="314" y2="102"></line>
+            <path class="thin" d="M250 102 L250 166"></path>
+            <text x="116" y="188">X Diameter mode - full width</text>
+            <text x="270" y="82">X Radius mode - half width</text>
+            <text class="note" x="96" y="214">Most lathes use diameter mode. Verify before entering offsets.</text>
+          </svg>
+        </details>
         <div class="row">
           <button class="filled" onclick="calcTouchOff()">Calculate Touch-Off</button>
           <button class="tonal" onclick="saveLastTouch()">Save Calculation</button>
@@ -163,6 +216,18 @@
     <section class="page" id="move">
       <div class="hero"><h2>Manual Lathe Move Calculator</h2><p>Calculate distance and direction before moving an axis.</p></div>
       <div class="card">
+        <svg class="shop-diagram" viewBox="0 0 520 200" role="img" aria-label="Z direction diagram showing negative Z toward the chuck and positive Z away from the chuck">
+          <rect x="60" y="54" width="78" height="92" rx="8"></rect>
+          <rect x="138" y="78" width="170" height="44" rx="22"></rect>
+          <line x1="160" y1="100" x2="450" y2="100"></line>
+          <polyline points="160,100 174,92 174,108"></polyline>
+          <polyline points="450,100 436,92 436,108"></polyline>
+          <text x="72" y="44">Chuck</text>
+          <text x="178" y="72">Part face</text>
+          <text x="116" y="168">Z- toward chuck</text>
+          <text x="332" y="168">Z+ away</text>
+          <text class="note" x="116" y="188">Verify direction on the actual control before jogging.</text>
+        </svg>
         <div class="two">
           <div class="field"><label>Axis</label><select id="moveAxis"><option>X</option><option>Z</option></select><p class="help">X moves toward or away from spindle centerline. Z moves along the spindle, usually toward or away from the part face.</p></div>
           <div class="field"><label>Current Position</label><input id="moveCurrent" type="number" step="0.0001"><p class="help">Where the control says the tool is now.</p></div>
@@ -227,9 +292,9 @@
     <section class="page" id="reference">
       <div class="hero"><h2>Setup Reference</h2><p>Lathe setup tips, safe approach, retract, and symbols.</p></div>
       <div class="grid">
-        <div class="card"><h3>Lathe Setup Tips</h3><div class="tip-list"><div class="tip">Face first when possible so Z zero is clean and repeatable.</div><div class="tip">Keep stickout short. Long stickout changes chatter, taper, and tool life.</div><div class="tip">Confirm chuck pressure, jaw contact, and part stop before cycle start.</div></div></div>
+        <div class="card"><h3>Lathe Setup Tips</h3><svg class="shop-diagram" viewBox="0 0 520 190" role="img" aria-label="Chuck jaw clearance diagram showing tool path near jaws"><rect x="60" y="48" width="84" height="96" rx="8"></rect><line x1="98" y1="56" x2="122" y2="86"></line><line x1="74" y1="96" x2="122" y2="96"></line><line x1="98" y1="136" x2="122" y2="106"></line><rect x="144" y="72" width="142" height="48" rx="24"></rect><path class="danger-line" d="M384 58 L298 96 L384 134"></path><line class="danger-line" x1="298" y1="96" x2="280" y2="96"></line><path class="thin" d="M290 140 C230 166 160 166 112 140"></path><text x="58" y="36">Chuck jaws</text><text x="168" y="66">Part</text><text x="310" y="48">Tool clearance</text><text class="note" x="96" y="176">Keep the tool clear of jaws before rapid moves.</text></svg><div class="tip-list"><div class="tip">Face first when possible so Z zero is clean and repeatable.</div><div class="tip">Keep stickout short. Long stickout changes chatter, taper, and tool life.</div><div class="tip">Confirm chuck pressure, jaw contact, and part stop before cycle start.</div></div></div>
         <div class="card"><h3>Touch-off Tips</h3><div class="tip-list"><div class="tip">Write down whether X was set in diameter or radius mode.</div><div class="tip">Check the program safety lines, setup notes, and active modal display for diameter/radius mode. On some controls G7 means diameter and G8 means radius, but verify the machine manual.</div><div class="tip">After touching Z face, retract in X or Z before jogging quickly.</div><div class="tip">Measure twice before changing an offset by a large amount.</div></div></div>
-        <div class="card"><h3>Safe Approach / Retract</h3><div class="tip-list"><div class="tip">Rapid to clearance, feed near the part.</div><div class="tip">Single block first move after offset changes.</div><div class="tip">Retract clear before tool change, restart, or index.</div></div></div>
+        <div class="card"><h3>Safe Approach / Retract</h3><svg class="shop-diagram" viewBox="0 0 520 200" role="img" aria-label="Safe rapid and feed path diagram"><rect x="84" y="80" width="190" height="52" rx="26"></rect><path class="thin" d="M390 48 L320 48 L320 106 L274 106"></path><path d="M274 106 L236 106"></path><path class="thin" d="M236 106 L236 48 L390 48"></path><polyline points="320,106 308,98 308,114"></polyline><polyline points="236,48 248,40 248,56"></polyline><text x="78" y="72">Stock</text><text x="302" y="38">Rapid clear</text><text x="218" y="154">Feed near part</text><text class="note" x="94" y="182">Rapid away from stock. Feed only when close and controlled.</text></svg><div class="tip-list"><div class="tip">Rapid to clearance, feed near the part.</div><div class="tip">Single block first move after offset changes.</div><div class="tip">Retract clear before tool change, restart, or index.</div></div></div>
         <div class="card"><h3>Symbols & Meanings</h3><table><tr><th>Term</th><th>Meaning</th></tr><tr><td>X</td><td>Cross-slide axis. On many CNC lathes, X is shown as diameter, so a .010 X change can mean .005 per side.</td></tr><tr><td>X diameter mode</td><td>X numbers represent the full part diameter. Check the program safety block, setup sheet, and active modal display. Some controls use G7 for this mode.</td></tr><tr><td>X radius mode</td><td>X numbers represent distance from spindle centerline. Check the program safety block, setup sheet, and active modal display. Some controls use G8 for this mode.</td></tr><tr><td>G7 / G8</td><td>Common diameter/radius mode codes on some lathes. Do not assume. Haas, LinuxCNC, Fanuc-style, and other controls can differ by machine, setting, or parameter.</td></tr><tr><td>Safety block</td><td>The first few program lines that set important modes before cutting. Look here for units, work offset, feed mode, spindle mode, and sometimes diameter/radius mode.</td></tr><tr><td>Active modal display</td><td>The control screen area showing the G-codes currently active. Use it to confirm what mode the machine is actually in right now.</td></tr><tr><td>Z</td><td>Spindle-length axis. Z usually controls movement toward or away from the face of the part.</td></tr><tr><td>Control</td><td>The machine computer and panel. Confirm the correct machine, mode, screen, program, and active offsets before moving.</td></tr><tr><td>Work zero</td><td>The part reference point the job is built from. It is not the same thing as machine home.</td></tr><tr><td>Machine zero</td><td>The machine's fixed reference/home position. The part is usually located by work offsets from this reference.</td></tr><tr><td>Work offset</td><td>The saved location of the part zero. Common examples are G54, G55, and G56.</td></tr><tr><td>Tool offset</td><td>The saved position correction for a tool. It tells the control where that tool tip is.</td></tr><tr><td>Wear offset</td><td>A small fine correction after setup, often used to bring a measured part into tolerance.</td></tr><tr><td>Touch-off</td><td>The act of carefully finding where a tool touches the part, stock, face, gauge, or known surface.</td></tr><tr><td>Chuck</td><td>The clamp that holds the part while it spins.</td></tr><tr><td>Jaws</td><td>The gripping blocks inside the chuck. Watch clearance near jaws during approach and retract.</td></tr><tr><td>Grip</td><td>How much material the jaws are holding. Too little grip can be unsafe.</td></tr><tr><td>Stickout</td><td>The amount of part or tool sticking out unsupported. Shorter is usually more rigid and safer.</td></tr><tr><td>Air move</td><td>A test move made away from the material so you can confirm direction and path before cutting.</td></tr><tr><td>Single block</td><td>A mode that runs one line of program at a time. Useful for first moves after setup changes.</td></tr><tr><td>Feed override</td><td>A control setting that slows or speeds feed moves. Use low feed override when proving out.</td></tr><tr><td>Safe retract</td><td>A planned move away from the part, jaws, chuck, shoulder, or tool before rapid moves or tool changes.</td></tr><tr><td>SFM</td><td>Surface feet per minute. A cutting speed value based on material, tool, and part diameter.</td></tr><tr><td>RPM</td><td>Spindle revolutions per minute. How fast the part or tool rotates.</td></tr><tr><td>IPR</td><td>Inches per revolution. How far the tool feeds for each spindle turn on a lathe.</td></tr></table></div>
       </div>
     </section>
