@@ -30,3 +30,19 @@ Standalone beginner lathe setup app.
 - The touch-off helper includes inline warnings for common mistakes such as diameter/radius confusion and large offset corrections.
 - Touch-off calculations can be saved to a recent history list.
 - Job Notes includes a handoff summary with print and JSON export support.
+## Assistant Change Guidelines
+
+Before making code or file changes in this repo:
+
+1. Clarify the beginner touch-off goal, assumptions, constraints, and measurable success criteria.
+2. Use structured output for setup steps, checklists, risks, documentation, and troubleshooting.
+3. Compare options before changing setup wizard behavior, touch-off logic, references, storage, dependencies, or AI behavior.
+4. Use brainstorming only for beginner-safe guidance, checklist, reference, and UI ideas.
+5. Give technical explanations only when needed, and keep them plain-English and beginner-safe.
+6. Draft concise documentation or handoff notes for user-facing workflow changes.
+7. Use a troubleshooting checklist before fixing bugs in setup wizard, touch-off helper, notes, references, import/export, or offline behavior.
+8. Use learning-path content when it helps users understand safe setup habits.
+9. Assess risks before adding automation, AI fallback, generated instructions, or setup guidance changes.
+10. Optimize only for a named goal such as clarity, reliability, readability, offline use, or beginner safety.
+
+Permanent rule: MGP must remain visible in build/version information and cannot be removed, hidden, renamed, or replaced.
