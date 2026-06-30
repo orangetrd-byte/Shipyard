@@ -27,11 +27,11 @@ main{padding:18px;display:grid;gap:14px}.topbar{background:var(--panel);border:1
 <body>
 <div class="app">
 <aside>
-  <div class="brand"><div class="mark">SY</div><div><h1>Shipyard</h1><p>Codi Workbench · MGP v0.3</p></div></div>
+  <div class="brand"><div class="mark">SY</div><div><h1>Shipyard</h1><p>Codi Workbench · MGP v0.4</p></div></div>
   <div class="nav">
     <button class="active" data-jump="inlet">Drop Idea<span>rough thoughts go here</span></button>
     <button data-jump="floor">Workshop<span>work in progress</span></button>
-    <button data-jump="gate">Your OK<span>decide what happens</span></button>
+    <button data-jump="gate">You're OK<span>decide what happens</span></button>
     <button data-jump="hangar">Saved Stuff<span>keep what matters</span></button>
   </div>
   <div class="crew">
@@ -43,13 +43,13 @@ main{padding:18px;display:grid;gap:14px}.topbar{background:var(--panel);border:1
 </aside>
 <main>
   <section class="topbar">
-    <div><h2>Drop ideas. Check work. Approve what looks good.</h2><p>Put the rough idea here, let Codi do the hard part, then decide what stays. MGP build v0.3.</p></div>
+    <div><h2>Drop ideas. Check work. Approve what looks good.</h2><p>Put the rough idea here, let Codi do the hard part, then decide what stays. MGP build v0.4.</p></div>
     <div class="actions"><button class="btn" id="helpBtn">Help</button><button class="btn" id="seedBtn">Try demo</button><button class="btn red" id="resetBtn">Clear this device</button><button class="btn primary" id="exportBtn">Export backup</button></div>
   </section>
   <section class="stats">
     <div class="stat blue"><span>Drop Idea</span><strong id="stat-inlet">0</strong></div>
     <div class="stat amber"><span>Workshop</span><strong id="stat-floor">0</strong></div>
-    <div class="stat red"><span>Your OK</span><strong id="stat-gate">0</strong></div>
+    <div class="stat red"><span>You're OK</span><strong id="stat-gate">0</strong></div>
     <div class="stat green"><span>Saved Stuff</span><strong id="stat-hangar">0</strong></div>
   </section>
   <section class="grid" id="inlet">
@@ -74,7 +74,7 @@ main{padding:18px;display:grid;gap:14px}.topbar{background:var(--panel);border:1
   </section>
   <section class="grid" id="gate">
     <div class="panel">
-      <div class="panel-head"><div><h3>Your OK</h3><small>Approve, change, or toss</small></div></div>
+      <div class="panel-head"><div><h3>You're OK</h3><small>Approve, change, or toss</small></div></div>
       <div class="panel-body"><div class="gate-list" id="gateList"></div></div>
     </div>
     <div class="panel" id="hangar">
@@ -101,7 +101,7 @@ main{padding:18px;display:grid;gap:14px}.topbar{background:var(--panel);border:1
     <div class="tutorial-body">
       <div class="tutorial-step"><strong>Drop Idea</strong><p>Start here. Add a short title, pick what kind of idea it is, choose how important it feels, and write the messy note.</p></div>
       <div class="tutorial-step"><strong>Workshop</strong><p>This board shows where each idea sits: dropped, waiting, being built, or waiting for your OK.</p></div>
-      <div class="tutorial-step"><strong>Your OK</strong><p>Anything here needs your decision. Looks Good saves it. Needs Changes sends it back. Toss It removes it.</p></div>
+      <div class="tutorial-step"><strong>You're OK</strong><p>Anything here needs your decision. Looks Good saves it. Needs Changes sends it back. Toss It removes it.</p></div>
       <div class="tutorial-step"><strong>Saved Stuff</strong><p>Approved work lands here so you can remember what mattered and reuse it later.</p></div>
       <div class="tutorial-step"><strong>What Happened</strong><p>This records what changed while you use Shipyard. Later it can show real Codi progress.</p></div>
       <div class="tutorial-step"><strong>Buttons</strong><p>Try demo adds sample cards. Clear this device wipes this phone browser data. Export backup saves the current Shipyard state.</p></div>
@@ -116,7 +116,7 @@ main{padding:18px;display:grid;gap:14px}.topbar{background:var(--panel);border:1
 const KEY='shipyard.local.v1';
 const TUTORIAL_KEY='shipyard.tutorial.seen.v1';
 const lanes=['inlet','queued','working','gate'];
-const laneNames={inlet:'Dropped',queued:'Waiting',working:'Being Built',gate:'Your OK'};
+const laneNames={inlet:'Dropped',queued:'Waiting',working:'Being Built',gate:"You're OK"};
 let state=load();
 function load(){try{return JSON.parse(localStorage.getItem(KEY))||{tasks:[],memory:[],events:[]}}catch{return{tasks:[],memory:[],events:[]}}}
 function save(){localStorage.setItem(KEY,JSON.stringify(state))}
@@ -140,6 +140,9 @@ document.getElementById('addBtn').addEventListener('click',addTask);document.get
 </script>
 </body>
 </html>
+
+
+
 
 
 

@@ -8,7 +8,7 @@ Phase 0.3: Human-First Wording
 
 - Repurpose this legacy Helper repo into Shipyard.
 - Keep the first build static, mobile-friendly, and local-first.
-- Explain Drop Idea, Workshop, Your OK, Saved Stuff, What Happened, and local controls on first use.
+- Explain Drop Idea, Workshop, You're OK, Saved Stuff, What Happened, and local controls on first use.
 - Hide GitHub/dev wording from the main mobile UI.
 - Preserve explicit approval flow before any future merge/deploy automation.
 - Keep MGP visible in version/build information.
@@ -23,6 +23,7 @@ Phase 0.3: Human-First Wording
 
 - Every version/build update must keep the letters MGP visible in the app's build or version information.
 - MGP cannot be removed, hidden, renamed, or replaced during future updates.
+
 
 
 
