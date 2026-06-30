@@ -1,10 +1,16 @@
 {
-  "name": "Touch-Off Helper",
-  "short_name": "Touch-Off",
-  "description": "Beginner lathe touch-off, move calculator, notes, speeds and feeds, and setup reference.",
-  "start_url": "./index.html",
+  "id": "/Helper/",
+  "name": "Shipyard",
+  "short_name": "Shipyard",
+  "description": "Controlled build room for Codi/Codex work: idea intake, build floor, approval gate, and hangar memory.",
+  "start_url": "/Helper/",
+  "scope": "/Helper/",
   "display": "standalone",
-  "background_color": "#f7fbfb",
-  "theme_color": "#0a6f73",
+  "background_color": "#f4f6f8",
+  "theme_color": "#172026",
+  "orientation": "any",
+  "categories": ["productivity", "developer", "utilities"],
+  "lang": "en-US",
+  "dir": "ltr",
   "icons": []
 }

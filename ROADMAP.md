@@ -1,26 +1,28 @@
-﻿# Helper Roadmap
+# Shipyard Roadmap
 
-## Phase 1: Beginner Touch-Off Stability
+## Phase 0: Local Prototype
 
-- Keep setup wizard, touch-off helper, job notes, and setup references reliable.
-- Preserve offline standalone behavior.
-- Maintain build information, version number, and MGP identity.
-- Keep the app separate from CNC Work Helper.
+- Static PWA shell
+- Local task cards
+- Inlet, Floor, Gate, Hangar workflow
+- localStorage persistence
+- JSON export
 
-## Phase 2: Setup Guidance Depth
+## Phase 1: GitHub Backing
 
-- Improve step-by-step lathe setup guidance.
-- Add clearer manual calculator support where it helps beginners.
-- Strengthen notes, import/export, and setup recovery.
+- Create cards from GitHub issues
+- Save Gate approvals into pull request notes
+- Store Hangar decisions in repo docs
 
-## Phase 3: Reference Clarity
+## Phase 2: Runner Visibility
 
-- Expand beginner-safe speeds, feeds, symbols, and setup tips.
-- Keep explanations plain and focused.
-- Avoid advanced G-code assistant or production planning scope.
+- Show command logs
+- Show touched files
+- Show test status
+- Show diff previews from real branches
 
-## Phase 4: Standalone Polish
+## Phase 3: Approval Controls
 
-- Improve phone usability and print/handoff outputs.
-- Tighten validation, empty states, and saved data behavior.
-- Keep the app small, focused, and easy to trust.
+- Require explicit approval before merge
+- Add comment-backed tweak requests
+- Keep an audit trail for each task

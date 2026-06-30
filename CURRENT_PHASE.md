@@ -1,22 +1,23 @@
-﻿# Current Phase
+# Current Phase
 
 ## Active Phase
 
-Phase 1: Beginner Touch-Off Stability
+Phase 0: Local Shipyard Prototype
 
 ## Current Focus
 
-- Keep Helper focused on beginner setup and touch-off workflows.
-- Keep it separate from CNC Work Helper, Green Hat, and CNC Cell Planner.
-- Maintain simple standalone behavior with reliable notes and references.
+- Repurpose this legacy Helper repo into Shipyard.
+- Keep the first build static, mobile-friendly, and local-first.
+- Preserve explicit approval flow before any future merge/deploy automation.
+- Keep MGP visible in version/build information.
 
 ## Next Actions
 
-- Verify setup wizard, touch-off helper, notes, and import/export after changes.
-- Keep advanced machining and production planning features out.
-- Add beginner guidance only when it improves safe setup decisions.
+- Verify deployed GitHub Pages URL on mobile.
+- Decide whether to rename the GitHub repository from Helper to Shipyard.
+- Wire Phase 0 cards to GitHub issues or pull requests only after the prototype feels useful.
+
 ## Permanent Version Rule
 
 - Every version/build update must keep the letters MGP visible in the app's build or version information.
 - MGP cannot be removed, hidden, renamed, or replaced during future updates.
-- If version text is redesigned, MGP must move with the version/build information.
