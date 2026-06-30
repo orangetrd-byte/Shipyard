@@ -2,7 +2,7 @@
 
 ## Active Phase
 
-Phase 0.8: Codi tasks in Workshop lanes
+Phase 0.9: De-duplicated Codi tasks
 
 ## Current Focus
 
@@ -13,6 +13,7 @@ Phase 0.8: Codi tasks in Workshop lanes
 - Add Send to Codi as a safe, prefilled GitHub handoff without storing tokens.
 - Add Refresh from Codi to show open Shipyard tasks from GitHub without login.
 - Blend refreshed Codi tasks into the Workshop Waiting lane instead of a separate block.
+- Keep repeated Codi issues from showing as duplicate Waiting cards.
 - Preserve explicit approval flow before any future merge/deploy automation.
 - Keep MGP visible in version/build information.
 
