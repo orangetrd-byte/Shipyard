@@ -2,7 +2,7 @@
 
 ## Active Phase
 
-Phase 1.4: Mobile Codi bridge
+Phase 1.5: Installable phone PWA
 
 ## Current Focus
 
@@ -18,6 +18,7 @@ Phase 1.4: Mobile Codi bridge
 - Replace local sent cards with live Codi cards after Refresh from Codi.
 - Send ideas straight through a local bridge when it is running.
 - Send ideas through the Cloudflare bridge first for mobile.
+- Make Shipyard installable from phone browser with a correct manifest, app icons, and service worker registration.
 - Keep the GitHub issue form as a fallback when the bridge is unavailable.
 - Show a clear local status when the Codi bridge is not ready.
 - Add Windows scripts to start the local Codi bridge and install it at login.
