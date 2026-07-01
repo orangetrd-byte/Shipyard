@@ -2,7 +2,7 @@
 
 ## Active Phase
 
-Phase 1.2: Bridge fallback clarity
+Phase 1.3: Bridge autostart helper
 
 ## Current Focus
 
@@ -19,6 +19,7 @@ Phase 1.2: Bridge fallback clarity
 - Send ideas straight through a local bridge when it is running.
 - Keep the GitHub issue form as a fallback when the bridge is unavailable.
 - Show a clear local status when the Codi bridge is not ready.
+- Add Windows scripts to start the local Codi bridge and install it at login.
 - Preserve explicit approval flow before any future merge/deploy automation.
 - Keep MGP visible in version/build information.
 
