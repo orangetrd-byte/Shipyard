@@ -8,6 +8,38 @@ or desktop.
 
 ---
 
+## Current Status - July 2, 2026
+
+Current app build: **MGP v1.14**
+
+The core intake path is working end to end:
+
+```text
+Phone/PWA -> Create Codi issue -> bridge -> GitHub issue
+Phone/PWA -> Refresh issues -> Workshop Waiting
+Phone/PWA -> Keep on board -> local Shipyard card
+```
+
+Latest smoke test:
+
+- Bridge `/health`: PASS.
+- `shipyard-bridge.mjs` syntax: PASS.
+- `sw.js` syntax: PASS.
+- `manifest.json` parse: PASS.
+- `index.html` manifest/service-worker refs: PASS.
+- Live GitHub issue POST: PASS.
+- Test issue `#25` was created, then closed as `not planned`.
+
+Current board behavior:
+
+- `Create Codi issue` means real GitHub issue.
+- `Keep on board` means local browser card only.
+- Local cards move through Dropped, Waiting, Being Built, You're OK, and Saved Stuff.
+- `Looks Good` saves an approved card into Saved Stuff with a short trail.
+- Telegram/Hermes and Cloudflare work are parked for future updates unless deliberately reactivated.
+
+---
+
 ## Core Screens (phone + desktop)
 
 **1. Inlet**

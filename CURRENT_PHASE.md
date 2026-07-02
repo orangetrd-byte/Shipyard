@@ -2,40 +2,39 @@
 
 ## Active Phase
 
-Phase 1.11: Clear team labels
+Phase 1.14: Core intake and board lifecycle stable
 
 ## Current Focus
 
-- Repurpose this legacy Helper repo into Shipyard.
 - Keep the first build static, mobile-friendly, and local-first.
-- Explain Drop Idea, Workshop, You're OK, Saved Stuff, What Happened, and local controls on first use.
-- Hide GitHub/dev wording from the main mobile UI.
-- Add Send to Codi as a safe, prefilled GitHub handoff without storing tokens.
-- Add Refresh from Codi to show open Shipyard tasks from GitHub without login.
-- Blend refreshed Codi tasks into the Workshop Waiting lane instead of a separate block.
-- Keep repeated Codi issues from showing as duplicate Waiting cards.
-- Add a local Waiting card immediately when Dad sends an idea to Codi.
-- Replace local sent cards with live Codi cards after Refresh from Codi.
-- Send ideas straight through a local bridge when it is running.
-- Send ideas through the Cloudflare bridge first for mobile.
-- Make Shipyard installable from phone browser with a correct manifest, app icons, and service worker registration.
-- Show the full Shipyard team: Dad, Herman, Codi, four helpers, and qwen3.6 parked on the back burner.
-- Make the phone PWA feel more app-like with bottom navigation, a tighter header, and easier thumb targets.
-- Resolve old issue clutter with generalized team labels, dark mode, and a clearable activity log.
-- Make Send to Codi the primary Drop Idea action and label the browser-only path as Keep local.
-- Add Hermes to the Shipyard team as the runner/messenger role.
-- Rename the vague Source crew slot to Idea Source.
-- Keep the GitHub issue form as a fallback when the bridge is unavailable.
-- Show a clear local status when the Codi bridge is not ready.
-- Add Windows scripts to start the local Codi bridge and install it at login.
+- Keep the core board understandable before adding more integrations.
+- Use clear Drop Idea actions:
+  - `Create Codi issue` creates a real GitHub issue through the bridge/fallback.
+  - `Keep on board` creates a browser-local Shipyard card only.
+- Keep GitHub issue cards visually distinct from local cards.
+- Preserve the board lifecycle: Dropped -> Waiting -> Being Built -> You're OK -> Saved Stuff.
+- Save approved cards into Hangar/Saved Stuff with a short trail.
+- Keep refreshed GitHub issues blended into Workshop Waiting without duplicate local placeholders.
+- Keep Telegram and Cloudflare work parked for future updates unless deliberately pulled back in.
 - Preserve explicit approval flow before any future merge/deploy automation.
 - Keep MGP visible in version/build information.
 
 ## Next Actions
 
-- Verify Send to Codi creates a GitHub task from desktop and mobile.
-- Decide whether to rename the GitHub repository from Helper to Shipyard.
-- Wire Phase 0 cards to GitHub issues or pull requests only after the prototype feels useful.
+- Retest the hosted PWA after cache update and confirm it shows MGP v1.14.
+- Close or label any future smoke-test GitHub issues immediately after testing.
+- Decide the next core Shipyard need before reopening Telegram or Cloudflare work.
+- Improve the real build Floor only after the intake/approval loop keeps feeling useful.
+
+## Latest Smoke Test
+
+- Bridge `/health`: PASS.
+- `shipyard-bridge.mjs` syntax: PASS.
+- `sw.js` syntax: PASS.
+- `manifest.json` parse: PASS.
+- `index.html` manifest/service-worker references: PASS.
+- Live GitHub issue POST: PASS. Test issue `#25` was created, then closed as `not planned`.
+- Ad-hoc verification script: PASS, `problems: []`.
 
 ## Permanent Version Rule
 

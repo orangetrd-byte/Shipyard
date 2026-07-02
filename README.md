@@ -45,22 +45,24 @@ GitHub records.
 
 | Area | Status | Notes |
 |---|---|---|
-| Static PWA | Working | `index.html`, `manifest.json`, `sw.js`, icons |
-| Local board | Working | Browser `localStorage` key: `shipyard.local.v1` |
-| GitHub bridge | Working | Cloudflare bridge and local bridge paths exist |
+| Static PWA | Working | MGP v1.14; `index.html`, `manifest.json`, `sw.js`, icons |
+| Local board | Working | Browser `localStorage` key: `shipyard.local.v1`; card lifecycle and trails work |
+| GitHub intake | Working | `Create Codi issue` created real issue `#25` during smoke test |
+| Local bridge | Working | `/health` passed with repo `orangetrd-byte/Shipyard` |
 | Mobile install | Working | PWA shell and phone layout exist |
-| Hermes Telegram | Prototype working | `/inlet`, `/floor`, `/hangar`, Promote to Gate |
-| Codi Telegram | Not built yet | Token exists, runner still needs deliberate build |
-| Approval model | Partially working | Gate concept exists; diff/merge approval is future |
+| Hermes Telegram | Parked prototype | Future-update lane; not part of current core build |
+| Codi Telegram | Parked | Do not build further until Telegram lane is active again |
+| Cloudflare bridge | Parked | Future always-online doorway; local/core board comes first |
+| Approval model | Working locally | Cards stop in You're OK; Saved Stuff only after Looks Good |
 | Runner visibility | Not built yet | Logs, touched files, diff preview are future |
-| Always-online bots | Not built yet | Local polling works for test, but mobile-first needs webhook |
+| Test issue cleanup | Done | Test issue `#25` closed as `not planned` |
 
 ## Active Phase
 
 Current phase from `CURRENT_PHASE.md`:
 
 ```text
-Phase 1.11: Clear team labels
+Phase 1.14: Core intake and board lifecycle stable
 ```
 
 Current practical focus:
@@ -68,8 +70,9 @@ Current practical focus:
 - Keep the app local-first and mobile-friendly.
 - Keep MGP visible in version/build information.
 - Keep Boss approval explicit before future merge/deploy automation.
-- Stop relying on one open PowerShell window for mobile control.
-- Split Hermes and Codi cleanly instead of sharing one generic bot token.
+- Keep `Create Codi issue` and `Keep on board` impossible to confuse.
+- Keep Telegram and Cloudflare parked until they are deliberately active again.
+- Improve the core Shipyard board before adding more doorways.
 
 ## Product Sections
 
@@ -81,15 +84,16 @@ Inputs may be typed notes, voice-note summaries, screenshots, pasted code, or qu
 
 Current:
 
-- Web form can create local cards.
-- Send to Codi can hand off through the GitHub bridge.
-- Hermes `/inlet <text>` creates a Telegram-tracked item.
+- `Keep on board` creates a local card on this device.
+- `Create Codi issue` creates a real GitHub issue through the bridge or fallback.
+- GitHub issue bodies now use real line breaks.
+- Smoke test issue `#25` proved the intake path and was closed.
 
 Target:
 
-- Hermes always online.
 - Every mobile idea becomes a visible Shipyard card.
 - Screenshots/attachments become task context.
+- Future always-online inlet can use Telegram/Cloudflare when that lane is reopened.
 
 ### Floor
 
@@ -99,7 +103,9 @@ Current:
 
 - Board has lanes.
 - GitHub issues can blend into Workshop Waiting.
-- Hermes `/floor` lists active Telegram-tracked items.
+- Local cards show `Source: This device`.
+- Refreshed GitHub cards show as GitHub issues.
+- Local cards can move Waiting -> Being Built -> You're OK.
 
 Target:
 
@@ -114,8 +120,11 @@ Approval checkpoint.
 
 Current:
 
-- Hermes can promote an Inlet item to Gate.
 - Shipyard UI has You're OK approval area.
+- Local cards stop for Boss approval.
+- `Looks Good` saves to Hangar/Saved Stuff.
+- `Needs Changes` sends work back to Waiting.
+- `Toss It` removes the card and logs the decision.
 
 Target:
 
@@ -131,7 +140,8 @@ Project memory.
 Current:
 
 - Local Saved Stuff exists.
-- Telegram history JSON exists.
+- Approved local cards save a short decision trail.
+- Telegram history JSON exists but is parked future work.
 
 Target:
 
@@ -140,7 +150,9 @@ Target:
 - Saved diffs/snippets/reference links.
 - Search by keyword, tag, date.
 
-## Bot Split
+## Parked Bot Split
+
+Telegram is parked as future-update work. Keep this section for context, but do not treat it as the active build lane.
 
 Use two separate bots and two separate tokens.
 
@@ -266,56 +278,46 @@ telegram/telegram_history.json
 
 ## Plan Of Action
 
-### Step 1: Stabilize Hermes
+### Step 1: Stabilize Core Intake
+
+Status: done
+
+- [x] Phone/PWA can create a real GitHub issue.
+- [x] Bridge `/health` passes.
+- [x] `manifest.json`, `sw.js`, and `index.html` smoke checks pass.
+- [x] GitHub issue body formatting uses real line breaks.
+- [x] Test issue `#25` was closed after verification.
+
+### Step 2: Stabilize Board Lifecycle
 
 Status: in progress
 
-- [x] Separate Hermes token as `HERMES_TELEGRAM_TOKEN`
-- [x] `/inlet` creates an item
-- [x] `/floor` lists items
-- [x] Promote to Gate works
-- [ ] Clear old test JSON state safely
-- [ ] Verify no 409 conflicts after token reset
-- [ ] Decide whether local polling remains only a dev tool
+- [x] Rename Drop Idea actions to `Create Codi issue` and `Keep on board`.
+- [x] Show source on local cards.
+- [x] Keep GitHub issue cards visually separate.
+- [x] Move local cards through Waiting, Being Built, You're OK, and Saved Stuff.
+- [x] Save approved cards with a short trail.
+- [ ] Decide whether old/local test cards should have an archive/cleanup path.
+- [ ] Decide whether GitHub issue cards need board actions or should stay read-only links.
 
-### Step 2: Build Codi Bot Separately
+### Step 3: Real Build Floor
 
-Status: not started
+Status: future
 
-- [ ] Add `telegram/codi-bot.js`
-- [ ] Add `start-codi.ps1`
-- [ ] Use only `CODI_TELEGRAM_TOKEN`
-- [ ] Add `/status`
-- [ ] Add `/issue`
-- [ ] Route Codi tasks through GitHub/bridge without touching Hermes token
+- [ ] Show Codex/Codi run status.
+- [ ] Show touched files.
+- [ ] Show live log tail.
+- [ ] Show diff preview.
+- [ ] Require Gate approval before merge/deploy.
 
-### Step 3: Make Mobile Always-On
+### Step 4: Reopen Telegram/Cloudflare
 
-Status: planned
-
-- [ ] Move Hermes from local polling to Cloudflare webhook
-- [ ] Store no secrets in browser
-- [ ] Make phone Telegram usable when PC is asleep
-- [ ] Keep local bridge as build/shop tool, not doorway
-
-### Step 4: Visible Board Bridge
-
-Status: planned
+Status: parked
 
 - [ ] Hermes `/inlet` items appear in Shipyard Inlet/Workshop
 - [ ] Gate promotions appear in You're OK
 - [ ] Hangar decisions sync into Saved Stuff
 - [ ] Avoid duplicate cards between Telegram JSON, localStorage, and GitHub issues
-
-### Step 5: Real Build Floor
-
-Status: future
-
-- [ ] Show Codex/Codi run status
-- [ ] Show touched files
-- [ ] Show live log tail
-- [ ] Show diff preview
-- [ ] Require Gate approval before merge/deploy
 
 ## Open Questions
 
