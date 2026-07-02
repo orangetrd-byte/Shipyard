@@ -10,35 +10,11 @@ Shipyard turns messy ideas into tracked build tasks, shows what the crew is doin
 The Boss should be able to run the build crew from anywhere:
 
 ```text
-Drop messy idea
-Hermes catches it
-Shipyard tracks it
-Codi/Codex builds it
-Gate asks Boss for approval
-Hangar remembers why
+
 ```
 
 Shipyard is not supposed to be another chat thread. It is a small construction site with a front desk, floor, approval gate, and memory.
 
-## Team
-
-| Role | Name | Job |
-|---|---|---|
-| Boss | User | Final authority, priorities, approvals, taste, ship/kill decisions |
-| Hermes | Herman the worm /  | Mobile front desk and coordinator |
-| Codi/ `` | Build brain, coding worker, GitHub handoff |
-| Shipyard | This app | Control room: Inlet, Floor, Gate, Hangar |
-| GitHub | Repo/issues/commits | Ledger and source of truth for code history |
-| Cloudflare | Worker/bridge | Always-online doorway for mobile workflows |
-
-Core rule:
-
-```text
-Boss decides.
-Hermes coordinates.
-Codi builds.
-Shipyard tracks.
-GitHub records.
 ```
 
 ## Current Status
