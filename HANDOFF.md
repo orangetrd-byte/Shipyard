@@ -10,7 +10,7 @@ or desktop.
 
 ## Current Status - July 2, 2026
 
-Current app build: **MGP v1.14**
+Current app build: **MGP v1.15**
 
 The core intake path is working end to end:
 

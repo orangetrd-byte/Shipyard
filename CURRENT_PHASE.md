@@ -21,7 +21,7 @@ Phase 1.14: Core intake and board lifecycle stable
 
 ## Next Actions
 
-- Retest the hosted PWA after cache update and confirm it shows MGP v1.14.
+- Retest the hosted PWA after cache update and confirm it shows MGP v1.15.
 - Close or label any future smoke-test GitHub issues immediately after testing.
 - Decide the next core Shipyard need before reopening Telegram or Cloudflare work.
 - Improve the real build Floor only after the intake/approval loop keeps feeling useful.
