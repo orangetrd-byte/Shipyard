@@ -45,7 +45,7 @@ GitHub records.
 
 | Area | Status | Notes |
 |---|---|---|
-| Static PWA | Working | MGP v1.15; `index.html`, `manifest.json`, `sw.js`, icons |
+| Static PWA | Working | MGP v1.14; `index.html`, `manifest.json`, `sw.js`, icons |
 | Local board | Working | Browser `localStorage` key: `shipyard.local.v1`; card lifecycle and trails work |
 | GitHub intake | Working | `Create Codi issue` created real issue `#25` during smoke test |
 | Local bridge | Working | `/health` passed with repo `orangetrd-byte/Shipyard` |
@@ -297,7 +297,7 @@ Status: in progress
 - [x] Keep GitHub issue cards visually separate.
 - [x] Move local cards through Waiting, Being Built, You're OK, and Saved Stuff.
 - [x] Save approved cards with a short trail.
-- [x] Add `Clear local cards` for old/test board cards without wiping Saved Stuff or logs.
+- [ ] Decide whether old/local test cards should have an archive/cleanup path.
 - [ ] Decide whether GitHub issue cards need board actions or should stay read-only links.
 
 ### Step 3: Real Build Floor

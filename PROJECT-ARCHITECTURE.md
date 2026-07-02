@@ -2,7 +2,7 @@
 
 Shipyard is currently a static, local-first PWA with a working GitHub intake path.
 
-Current app build: MGP v1.15.
+Current app build: MGP v1.14.
 
 ## Files
 
