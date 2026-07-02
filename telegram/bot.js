@@ -46,7 +46,7 @@ async function poll() {
 
         if (update.message && update.message.text) {
           const raw = update.message.text.trim();
-          const text = raw.replace(/@\S+$/, '').trim();
+          const text = raw.replace(/^\/([a-z0-9_]+)@\S+/i, '/$1').trim();
           if (text.startsWith('/inlet')) {
             await handleInlet({ message: update.message, reply: (msg, opts) => api('sendMessage', { chat_id: update.message.chat.id, ...makeReplyPayload(msg, opts) }) });
           } else if (text === '/floor') {
