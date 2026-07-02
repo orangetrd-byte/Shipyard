@@ -26,7 +26,7 @@ Shipyard is not supposed to be another chat thread. It is a small construction s
 |---|---|---|
 | Boss | User | Final authority, priorities, approvals, taste, ship/kill decisions |
 | Hermes | Herman the worm /  | Mobile front desk and coordinator |
-| Codi | ChatGPT / Codex / `` | Build brain, coding worker, GitHub handoff |
+| Codi/ `` | Build brain, coding worker, GitHub handoff |
 | Shipyard | This app | Control room: Inlet, Floor, Gate, Hangar |
 | GitHub | Repo/issues/commits | Ledger and source of truth for code history |
 | Cloudflare | Worker/bridge | Always-online doorway for mobile workflows |
