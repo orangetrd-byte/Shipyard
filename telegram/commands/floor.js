@@ -18,10 +18,13 @@ async function handleFloor(ctx) {
       hour: '2-digit',
       minute: '2-digit'
     });
-    return `${i + 1}. ${entry.text}\n   _${entry.status} · ${time}_`;
+    return `${i + 1}. ${entry.text}
+   _${entry.status} · ${time}_`;
   });
 
-  await ctx.reply(`🏭 **Floor — ${pending.length} active:**\n\n${lines.join('\n\n')}`, {
+  await ctx.reply(`🏭 **Floor — ${pending.length} active:**
+
+${lines.join('\n\n')}`, {
     parse_mode: 'Markdown'
   });
 }

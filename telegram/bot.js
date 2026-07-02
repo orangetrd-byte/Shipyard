@@ -7,7 +7,7 @@ const { handleFloor } = require('./commands/floor.js');
 const { handleGateCallback } = require('./commands/gate.js');
 const { handleHangar } = require('./commands/hangar.js');
 
-const BOT_TOKEN = process.env.HERMES_TELEGRAM_TOKEN || process.env.TELEGRAM_BOT_TOKEN;
+const BOT_TOKEN = process.env.HERMES_TELEGRAM_TOKEN;
 if (!BOT_TOKEN) {
   console.error('Missing env var: HERMES_TELEGRAM_TOKEN');
   process.exit(1);

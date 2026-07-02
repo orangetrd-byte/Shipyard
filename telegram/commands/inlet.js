@@ -8,9 +8,7 @@ function buildInlineKeyboard(entry_id) {
   return {
     inline_keyboard: [
       [
-        { text: '✅ Ship It', callback_data: `gate:ship:${entry_id}` },
-        { text: '✏️ Tweak', callback_data: `gate:tweak:${entry_id}` },
-        { text: '🗑️ Scrap', callback_data: `gate:scrap:${entry_id}` }
+        { text: 'Promote to Gate', callback_data: `gate:review:${entry_id}` }
       ]
     ]
   };

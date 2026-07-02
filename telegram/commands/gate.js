@@ -8,6 +8,7 @@ const {
 const ACTIONS = Object.freeze({
   ship: 'shipped',
   tweak: 'tweak',
+  review: 'gate',
   scrap: 'scrapped',
 });
 
@@ -27,6 +28,7 @@ function makeGateReply(action, item) {
   const title = item?.text || item?.title || 'item';
   if (action === 'ship') return `Shipyard marked this ready: ${title}`;
   if (action === 'tweak') return `Shipyard moved this to Gate for changes: ${title}`;
+  if (action === 'review') return `Shipyard promoted to Gate for review: ${title}`;
   return `Shipyard scrapped this: ${title}`;
 }
 
@@ -34,6 +36,7 @@ function completeFromInbox(id, action) {
   const approval = moveInboxItemToApprovals(id, { gate_action: action });
   if (!approval) return null;
   if (action === 'tweak') return approval;
+  if (action === 'review') return approval;
   return completeApproval(id, ACTIONS[action], { gate_action: action });
 }
 
